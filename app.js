@@ -1,13 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const app = express();
 
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'student_management',
-    port: 8889
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
 });
 
 db.connect((err) => {
@@ -15,7 +16,7 @@ db.connect((err) => {
         console.error('Database connection failed:', err);
         return;
     }
-    console.log('Connected to MySQL');
+    console.log('Connected to MySQL securely!');
 });
 
 app.set('view engine', 'ejs');
@@ -72,7 +73,6 @@ app.post('/students/add', (req, res) => {
     });
 });
 
-// NEW SEARCH ROUTE
 app.get('/students/search', (req, res) => {
     const keyword = req.query.keyword || '';
     const sql = `
